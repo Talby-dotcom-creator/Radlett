@@ -19,7 +19,7 @@ const App: React.FC = () => {
 
   // Filter Logic
   const filteredEvents = useMemo(() => {
-    return events.filter(evt => {
+    return events.filter((evt: CalendarEvent) => {
         const searchLower = searchTerm.toLowerCase().trim();
         if (searchLower === '') return filterType === 'ALL' || checkTypeMatch(evt, filterType);
 
@@ -95,18 +95,18 @@ const App: React.FC = () => {
 
   const eventsByMonth = useMemo(() => {
     const grouped: CalendarEvent[][] = Array.from({ length: 12 }, () => []);
-    filteredEvents.forEach(evt => {
+    filteredEvents.forEach((evt: CalendarEvent) => {
       grouped[evt.date.getMonth()].push(evt);
     });
     return grouped;
   }, [filteredEvents]);
 
-  const handleClearFilters = () => {
+  const handleClearFilters = (): void => {
     setSearchTerm('');
     setFilterType('ALL');
   };
 
-  const handleJumpToToday = () => {
+  const handleJumpToToday = (): void => {
     const now = new Date();
     if (now.getFullYear() === year) {
         const monthIndex = now.getMonth();
@@ -119,9 +119,9 @@ const App: React.FC = () => {
     }
   };
 
-  const handlePrint = () => window.print();
+  const handlePrint = (): void => window.print();
 
-  const handleDownloadICS = () => {
+  const handleDownloadICS = (): void => {
     const icsContent = generateICS(events);
     const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
     const url = window.URL.createObjectURL(blob);
@@ -206,12 +206,12 @@ const App: React.FC = () => {
                                 type="text" 
                                 placeholder="Search events or date (e.g. 15/08, 7th Sept)..." 
                                 value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                                 className="w-full pl-10 pr-10 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50/50 hover:bg-slate-50 focus:bg-white"
                             />
                             {searchTerm && (
                                 <button 
-                                    onClick={() => setSearchTerm('')}
+                                  onClick={() => setSearchTerm('')}
                                     className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 transition-colors"
                                 >
                                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
